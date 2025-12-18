@@ -1,0 +1,1823 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ساعت آموزشی کودکان - کلاس دوم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* استایل‌های کلی و ریست */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --neon-blue: #0ff0fc;
+            --neon-pink: #ff00ff;
+            --neon-green: #00ff9d;
+            --neon-purple: #9d00ff;
+            --neon-yellow: #fff700;
+            --dark-bg: #0a0a16;
+            --card-bg: #121225;
+            --text-light: #ffffff;
+            --shadow-glow: 0 0 15px, 0 0 25px;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            overflow-x: hidden;
+            min-height: 100vh;
+            background-image: radial-gradient(circle at 20% 30%, rgba(157, 0, 255, 0.15) 0%, transparent 20%),
+                              radial-gradient(circle at 80% 70%, rgba(0, 255, 157, 0.15) 0%, transparent 20%);
+            touch-action: pan-y; /* جلوگیری از زوم ناخواسته */
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .container {
+            width: 100%;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* صفحه ورود */
+        .login-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            background: linear-gradient(135deg, #0a0a16 0%, #1a1a2e 100%);
+        }
+
+        .login-title {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-align: center;
+            background: linear-gradient(to right, var(--neon-blue), var(--neon-pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
+            animation: pulse 2s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { text-shadow: 0 0 10px rgba(0, 255, 157, 0.5); }
+            100% { text-shadow: 0 0 20px rgba(0, 255, 157, 0.8), 0 0 30px rgba(157, 0, 255, 0.6); }
+        }
+
+        .login-subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            color: #aaa;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .login-card {
+            background-color: var(--card-bg);
+            border-radius: 25px;
+            padding: 35px 25px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5),
+                        0 0 20px rgba(15, 240, 252, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6),
+                        0 0 25px rgba(157, 0, 255, 0.3);
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: var(--neon-blue);
+            font-weight: 600;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px 20px;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(0, 0, 0, 0.3);
+            color: white;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            outline: none;
+        }
+
+        .input-field:focus {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 15px rgba(0, 255, 157, 0.5);
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(to right, var(--neon-purple), var(--neon-pink));
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            box-shadow: 0 5px 15px rgba(157, 0, 255, 0.4);
+        }
+
+        .login-button:hover, .login-button:active {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(157, 0, 255, 0.6);
+        }
+
+        .error-message {
+            color: #ff4757;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1rem;
+            min-height: 24px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .show-error {
+            opacity: 1;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+
+        /* هدر و منوی کشویی */
+        .main-header {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            height: 70px;
+            background: linear-gradient(to right, rgba(18, 18, 37, 0.95), rgba(10, 10, 22, 0.95));
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 1000;
+            border-bottom: 2px solid var(--neon-pink);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            color: var(--neon-blue);
+            font-size: 1.8rem;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .menu-toggle:hover, .menu-toggle:active {
+            background: rgba(15, 240, 252, 0.1);
+            transform: scale(1.1);
+        }
+
+        .app-title {
+            font-size: 1.6rem;
+            background: linear-gradient(to right, var(--neon-green), var(--neon-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+        }
+
+        /* منوی کشویی سمت راست */
+        .sidebar {
+            position: fixed;
+            top: 70px;
+            right: -300px;
+            width: 280px;
+            height: calc(100vh - 70px);
+            background: linear-gradient(to bottom, #121225, #0a0a16);
+            padding: 25px 20px;
+            border-left: 3px solid var(--neon-pink);
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.3);
+            z-index: 999;
+            transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            overflow-y: auto;
+        }
+
+        .sidebar.open {
+            right: 0;
+        }
+
+        .sidebar-title {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            text-align: center;
+            color: var(--neon-yellow);
+            text-shadow: 0 0 10px rgba(255, 247, 0, 0.5);
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 18px 20px;
+            margin-bottom: 15px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-item:hover, .menu-item:active {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(-10px);
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px rgba(15, 240, 252, 0.3);
+        }
+
+        .menu-item.active {
+            background: linear-gradient(to right, rgba(15, 240, 252, 0.2), rgba(157, 0, 255, 0.2));
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 20px rgba(157, 0, 255, 0.4);
+        }
+
+        .menu-icon {
+            margin-left: 15px;
+            font-size: 1.5rem;
+            width: 30px;
+            text-align: center;
+        }
+
+        .menu-text {
+            flex-grow: 1;
+        }
+
+        .content-area {
+            padding-top: 90px;
+            padding-bottom: 30px;
+            min-height: 100vh;
+            overflow-y: auto;
+            background: rgba(10, 10, 22, 0.7);
+        }
+
+        .mode-content {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .mode-title {
+            font-size: 2rem;
+            margin-bottom: 25px;
+            color: var(--neon-green);
+            text-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(0, 255, 157, 0.2);
+            text-align: center;
+        }
+
+        /* ساعت آنالوگ */
+        .clock-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            padding: 20px;
+        }
+
+        .analog-clock {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #1a1a2e, #0f0f1f);
+            position: relative;
+            box-shadow: 
+                inset 0 0 30px rgba(0, 0, 0, 0.8),
+                0 10px 30px rgba(0, 0, 0, 0.8),
+                0 0 0 10px rgba(255, 255, 255, 0.05),
+                0 0 30px var(--neon-blue);
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 40px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (min-width: 768px) {
+            .analog-clock {
+                width: 320px;
+                height: 320px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .analog-clock {
+                width: 250px;
+                height: 250px;
+            }
+        }
+
+        .clock-center {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--neon-yellow);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            box-shadow: 0 0 15px var(--neon-yellow);
+        }
+
+        .hour-hand, .minute-hand {
+            position: absolute;
+            background-color: white;
+            border-radius: 10px;
+            transform-origin: bottom center;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -100%);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .hour-hand {
+            width: 10px;
+            height: 30%;
+            background: linear-gradient(to top, var(--neon-pink), var(--neon-purple));
+            /* removed stray margin-top to keep the pivot centered */
+        }
+
+        .minute-hand {
+            width: 6px;
+            height: 40%;
+            background: linear-gradient(to top, var(--neon-blue), var(--neon-green));
+            /* removed stray margin-top to keep the pivot centered */
+        }
+
+        /* minute tick marks */
+        .clock-tick {
+            position: absolute;
+            width: 3px;
+            height: 8px; /* minor tick length */
+            background: rgba(15,240,252,0.95);
+            border-radius: 2px;
+            box-shadow: 0 0 6px rgba(15, 240, 252, 0.45);
+            transform-origin: center center;
+            pointer-events: none;
+            z-index: 2; /* behind numbers */
+            opacity: 0.95;
+        }
+
+        .clock-tick.major {
+            height: 14px; /* longer for 5-minute marks */
+            width: 4px;
+            background: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(15, 240, 252, 0.8);
+            z-index: 3;
+        }
+
+        /* ensure numbers are above ticks */
+        .clock-number {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--neon-yellow);
+            text-shadow: 0 0 10px rgba(255, 247, 0, 0.7);
+            z-index: 5;
+        }
+
+        .clock-numbers {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+
+        .clock-number {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--neon-yellow);
+            text-shadow: 0 0 10px rgba(255, 247, 0, 0.7);
+        }
+
+        @media (max-width: 360px) {
+            .clock-number {
+                font-size: 1.5rem;
+                width: 35px;
+                height: 35px;
+            }
+        }
+
+        /* کنترل‌های تعاملی */
+        .controls-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+
+        .control-button {
+            padding: 15px 20px;
+            border-radius: 15px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 140px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        @media (max-width: 480px) {
+            .control-button {
+                min-width: 130px;
+                padding: 14px 18px;
+                font-size: 1rem;
+            }
+        }
+
+        .primary-btn {
+            background: linear-gradient(to right, var(--neon-purple), var(--neon-pink));
+            color: white;
+        }
+
+        .secondary-btn {
+            background: linear-gradient(to right, var(--neon-blue), var(--neon-green));
+            color: white;
+        }
+
+        .control-button:hover, .control-button:active {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        /* نمایش زمان */
+        .time-display {
+            font-size: 2.5rem;
+            text-align: center;
+            margin: 25px 0;
+            color: var(--neon-blue);
+            text-shadow: 0 0 15px rgba(15, 240, 252, 0.7);
+            direction: ltr;
+            font-family: 'Courier New', monospace;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px 30px;
+            border-radius: 20px;
+            display: inline-block;
+            border: 2px solid rgba(15, 240, 252, 0.3);
+        }
+
+        @media (max-width: 480px) {
+            .time-display {
+                font-size: 2.2rem;
+                padding: 12px 25px;
+            }
+        }
+
+        /* حالت تمرین خودکار */
+        .difficulty-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        .difficulty-btn {
+            padding: 15px 20px;
+            border-radius: 15px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 100px;
+        }
+
+        .easy-btn {
+            background-color: #00b894;
+            color: white;
+            box-shadow: 0 0 15px rgba(0, 184, 148, 0.5);
+        }
+
+        .medium-btn {
+            background-color: #fdcb6e;
+            color: #2d3436;
+            box-shadow: 0 0 15px rgba(253, 203, 110, 0.5);
+        }
+
+        .hard-btn {
+            background-color: #e17055;
+            color: white;
+            box-shadow: 0 0 15px rgba(225, 112, 85, 0.5);
+        }
+
+        .difficulty-btn:hover, .difficulty-btn:active {
+            transform: scale(1.05);
+        }
+
+        .difficulty-btn.active {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px;
+        }
+
+        /* حالت تایپ */
+        .typing-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .time-inputs {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .input-with-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .input-label-small {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: var(--neon-yellow);
+        }
+
+        .number-input {
+            width: 110px;
+            padding: 15px;
+            border-radius: 15px;
+            border: 2px solid var(--neon-pink);
+            background-color: rgba(0, 0, 0, 0.3);
+            color: white;
+            font-size: 1.3rem;
+            text-align: center;
+            outline: none;
+        }
+
+        @media (max-width: 480px) {
+            .number-input {
+                width: 100px;
+                padding: 12px;
+                font-size: 1.2rem;
+            }
+        }
+
+        .number-input:focus {
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
+        }
+
+        /* فیدبک */
+        .feedback-container {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+            font-size: 1.3rem;
+            min-height: 70px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.5s;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .correct-feedback {
+            background: rgba(0, 184, 148, 0.2);
+            color: #00b894;
+            border: 2px solid #00b894;
+            box-shadow: 0 0 20px rgba(0, 184, 148, 0.5);
+        }
+
+        .incorrect-feedback {
+            background: rgba(225, 112, 85, 0.2);
+            color: #e17055;
+            border: 2px solid #e17055;
+            box-shadow: 0 0 20px rgba(225, 112, 85, 0.5);
+        }
+
+        /* راهنمای استفاده */
+        .instructions {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .instructions h3 {
+            color: var(--neon-green);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            text-align: center;
+        }
+
+        .instructions p {
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        /* کنترل‌های ساعت - نسخه موبایل */
+        .clock-controls {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            width: 100%;
+            max-width: 500px;
+            margin: 25px auto;
+        }
+
+        .clock-btn {
+            padding: 18px 10px;
+            border-radius: 15px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid transparent;
+        }
+
+        .clock-btn:hover, .clock-btn:active {
+            transform: translateY(-5px);
+            border-color: var(--neon-blue);
+            background: rgba(15, 240, 252, 0.2);
+            box-shadow: 0 5px 15px rgba(15, 240, 252, 0.3);
+        }
+
+        .clock-btn i {
+            font-size: 1.5rem;
+        }
+
+        /* انیمیشن‌ها */
+        @keyframes celebrate {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .celebrate {
+            animation: celebrate 0.5s ease-in-out 3;
+        }
+
+        /* حالت موبایل - بهبود کلی */
+        @media (max-width: 768px) {
+            .login-title {
+                font-size: 2.2rem;
+            }
+            
+            .login-card {
+                padding: 30px 20px;
+            }
+            
+            .mode-title {
+                font-size: 1.8rem;
+            }
+            
+            .clock-container {
+                padding: 10px;
+            }
+            
+            .controls-container {
+                gap: 12px;
+            }
+            
+            .time-inputs {
+                gap: 15px;
+            }
+            
+            .sidebar {
+                width: 260px;
+            }
+        }
+
+        /* نمایش جمع و جور‌تر مخصوص موبایل کوچک */
+        @media (max-width: 480px) {
+            /* هدر و عنوان */
+            .main-header {
+                height: 56px;
+                padding: 0 12px;
+            }
+
+            .login-title {
+                font-size: 1.6rem;
+            }
+
+            .login-card {
+                padding: 16px 14px;
+                max-width: 360px;
+                border-radius: 14px;
+            }
+
+            /* ساعت آنالوگ جمع و جورتر */
+            .analog-clock {
+                width: 200px !important;
+                height: 200px !important;
+                margin-bottom: 18px;
+            }
+
+            .clock-container {
+                padding: 8px;
+                margin-top: 6px;
+            }
+
+            .clock-number {
+                font-size: 1.2rem !important;
+                width: 28px !important;
+                height: 28px !important;
+            }
+
+            /* عقربه‌ها کمی کوتاه‌تر برای جای کمتر */
+            .hour-hand { height: 28% !important; }
+            .minute-hand { height: 36% !important; }
+
+            /* دکمه‌ها و آیکن‌ها کوچک‌تر */
+            .control-button, .clock-btn {
+                padding: 10px 12px !important;
+                font-size: 0.95rem !important;
+                min-width: 92px !important;
+                border-radius: 12px;
+            }
+
+            .control-button i, .clock-btn i {
+                font-size: 1.05rem !important;
+            }
+
+            .clock-controls {
+                gap: 8px;
+            }
+
+            .time-display {
+                font-size: 1.6rem !important;
+                padding: 10px 16px !important;
+                border-radius: 12px !important;
+            }
+
+            /* پنهان کردن کادر راهنما تا فضای صفحه آزاد شود */
+            .instructions {
+                display: none !important;
+            }
+
+            /* سایدبار مختصرتر */
+            .sidebar {
+                width: 220px !important;
+            }
+
+            /* نوارهای دقیقه کوچک‌تر برای تناسب */
+            .clock-tick { width: 2px; }
+            .clock-tick.major { width: 3px; }
+        }
+
+        /* جلوگیری از انتخاب متن برای تجربه بهتر موبایل */
+        .no-select {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
+</head>
+<body class="no-select">
+    <div class="container">
+        <!-- صفحه ورود -->
+        <div id="loginScreen" class="login-screen">
+            <h1 class="login-title">ساعت آموزشی کودکان</h1>
+            <p class="login-subtitle">مناسب دانش‌آموزان کلاس دوم دبستان<br>با رابط کاربری ساده و جذاب</p>
+            
+            <div class="login-card">
+                <div class="input-group">
+                    <label class="input-label" for="username">نام کاربری</label>
+                    <input type="text" id="username" class="input-field" placeholder="نام خود را وارد کنید" value="Abbas">
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label" for="password">رمز عبور</label>
+                    <input type="password" id="password" class="input-field" placeholder="رمز عبور را وارد کنید" value="1396">
+                </div>
+                
+                <button id="loginButton" class="login-button">
+                    <i class="fas fa-sign-in-alt"></i> ورود به برنامه
+                </button>
+                
+                <div id="errorMessage" class="error-message">
+                    نام کاربری یا رمز عبور اشتباه است
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px; color: #666; text-align: center; font-size: 0.9rem;">
+                <p>برای ورود از نام کاربری: <strong>Abbas</strong> و رمز عبور: <strong>1396</strong> استفاده کنید</p>
+            </div>
+        </div>
+        
+        <!-- داشبورد اصلی -->
+        <div id="mainContainer" class="hidden">
+            <!-- هدر -->
+            <header class="main-header">
+                <button id="menuToggle" class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <div class="app-title">آموزش ساعت به کودکان</div>
+                
+                <div style="width: 50px;"></div> <!-- فضای خالی برای تراز -->
+            </header>
+            
+            <!-- منوی کشویی -->
+            <div id="sidebar" class="sidebar">
+                <h2 class="sidebar-title">منوی آموزش</h2>
+                
+                <div id="manualMode" class="menu-item active">
+                    <div class="menu-icon"><i class="fas fa-hand-pointer"></i></div>
+                    <div class="menu-text">حالت دستی ساعت</div>
+                </div>
+                
+                <div id="autoMode" class="menu-item">
+                    <div class="menu-icon"><i class="fas fa-robot"></i></div>
+                    <div class="menu-text">حالت تمرین خودکار</div>
+                </div>
+                
+                <div id="hourMode" class="menu-item">
+                    <div class="menu-icon"><i class="fas fa-clock"></i></div>
+                    <div class="menu-text">حالت فقط ساعت</div>
+                </div>
+                
+                <div id="minuteMode" class="menu-item">
+                    <div class="menu-icon"><i class="fas fa-hourglass-half"></i></div>
+                    <div class="menu-text">حالت فقط دقیقه</div>
+                </div>
+                
+                <div id="typingMode" class="menu-item">
+                    <div class="menu-icon"><i class="fas fa-keyboard"></i></div>
+                    <div class="menu-text">حالت تایپ</div>
+                </div>
+                
+                <div id="logoutButton" class="menu-item" style="margin-top: 30px; background: rgba(255, 71, 87, 0.1); border-color: #ff4757;">
+                    <div class="menu-icon"><i class="fas fa-sign-out-alt"></i></div>
+                    <div class="menu-text">خروج از برنامه</div>
+                </div>
+            </div>
+            
+            <!-- محتوای اصلی -->
+            <div class="content-area">
+                <!-- حالت دستی ساعت -->
+                <div id="manualModeContent" class="mode-content">
+                    <h2 class="mode-title">حالت دستی ساعت</h2>
+                    
+                    <div class="clock-container">
+                        <div class="analog-clock" id="analogClock">
+                            <!-- اعداد ساعت (فارسی) -->
+                            <div class="clock-numbers" id="clockNumbers"></div>
+                            <div class="clock-center"></div>
+                            <div class="hour-hand" id="hourHand"></div>
+                            <div class="minute-hand" id="minuteHand"></div>
+                        </div>
+                        
+                        <div class="time-display" id="timeDisplay">۱۲:۰۰</div>
+                        
+                        <div class="clock-controls">
+                            <button id="prevHourBtn" class="clock-btn">
+                                <i class="fas fa-arrow-right"></i>
+                                <span>ساعت قبل</span>
+                            </button>
+                            
+                            <button id="nextHourBtn" class="clock-btn">
+                                <i class="fas fa-arrow-left"></i>
+                                <span>ساعت بعد</span>
+                            </button>
+                            
+                            <button id="prevMinuteBtn" class="clock-btn">
+                                <i class="fas fa-arrow-up"></i>
+                                <span>دقیقه قبل</span>
+                            </button>
+                            
+                            <button id="nextMinuteBtn" class="clock-btn">
+                                <i class="fas fa-arrow-down"></i>
+                                <span>دقیقه بعد</span>
+                            </button>
+                        </div>
+                        
+                        <div class="controls-container">
+                            <button id="resetClock" class="control-button secondary-btn">
+                                <i class="fas fa-redo"></i> بازنشانی ساعت
+                            </button>
+                            <button id="randomTime" class="control-button primary-btn">
+                                <i class="fas fa-random"></i> زمان تصادفی
+                            </button>
+                        </div>
+                        
+                        <div class="instructions">
+                            <h3>راهنمای استفاده:</h3>
+                            <p>برای تغییر ساعت از دکمه‌های «ساعت قبل» و «ساعت بعد» استفاده کنید.</p>
+                            <p>برای تغییر دقیقه از دکمه‌های «دقیقه قبل» و «دقیقه بعد» استفاده کنید.</p>
+                            <p>زمان انتخاب شده در کادر بالا نمایش داده می‌شود.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- حالت تمرین خودکار -->
+                <div id="autoModeContent" class="mode-content hidden">
+                    <h2 class="mode-title">حالت تمرین خودکار</h2>
+                    
+                    <div class="difficulty-selector">
+                        <button id="easyBtn" class="difficulty-btn easy-btn active">آسان</button>
+                        <button id="mediumBtn" class="difficulty-btn medium-btn">متوسط</button>
+                        <button id="hardBtn" class="difficulty-btn hard-btn">سخت</button>
+                    </div>
+                    
+                    <div class="clock-container">
+                        <div class="analog-clock" id="autoAnalogClock">
+                            <!-- اعداد ساعت (فارسی) -->
+                            <div class="clock-numbers" id="autoClockNumbers"></div>
+                            <div class="clock-center"></div>
+                            <div class="hour-hand" id="autoHourHand"></div>
+                            <div class="minute-hand" id="autoMinuteHand"></div>
+                        </div>
+                        
+                        <div class="controls-container">
+                            <button id="generateQuestion" class="control-button primary-btn">
+                                <i class="fas fa-question-circle"></i> ایجاد سوال جدید
+                            </button>
+                            <button id="showAnswer" class="control-button secondary-btn">
+                                <i class="fas fa-lightbulb"></i> نمایش پاسخ
+                            </button>
+                        </div>
+                        
+                        <div class="feedback-container" id="feedbackContainer">
+                            برای شروع دکمه «ایجاد سوال جدید» را بزنید
+                        </div>
+                        
+                        <div class="instructions">
+                            <h3>راهنمای استفاده:</h3>
+                            <p>سطح دشواری را انتخاب کنید (آسان: ساعت کامل، متوسط: مضرب ۵ دقیقه، سخت: دقیقه تصادفی).</p>
+                            <p>با زدن دکمه «ایجاد سوال جدید»، یک زمان تصادفی نمایش داده می‌شود.</p>
+                            <p>سعی کنید ساعت و دقیقه را تشخیص دهید، سپس پاسخ را ببینید.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- حالت فقط ساعت -->
+                <div id="hourModeContent" class="mode-content hidden">
+                    <h2 class="mode-title">حالت فقط ساعت</h2>
+                    
+                    <div class="clock-container">
+                        <div class="analog-clock" id="hourAnalogClock">
+                            <!-- اعداد ساعت (فارسی) -->
+                            <div class="clock-numbers" id="hourClockNumbers"></div>
+                            <div class="clock-center"></div>
+                            <div class="hour-hand" id="hourOnlyHand"></div>
+                            <div class="minute-hand" style="opacity: 0.3;" id="hourMinuteHand"></div>
+                        </div>
+                        
+                        <div class="time-display" id="hourTimeDisplay">۱۲:۰۰</div>
+                        
+                        <div class="clock-controls">
+                            <button id="prevHourOnly" class="clock-btn">
+                                <i class="fas fa-arrow-right"></i>
+                                <span>ساعت قبل</span>
+                            </button>
+                            
+                            <button id="nextHourOnly" class="clock-btn">
+                                <i class="fas fa-arrow-left"></i>
+                                <span>ساعت بعد</span>
+                            </button>
+                        </div>
+                        
+                        <div class="controls-container">
+                            <button id="randomHour" class="control-button primary-btn">
+                                <i class="fas fa-random"></i> ساعت تصادفی
+                            </button>
+                        </div>
+                        
+                        <div class="instructions">
+                            <h3>راهنمای استفاده:</h3>
+                            <p>در این حالت فقط عقربه ساعت حرکت می‌کند (عقربه دقیقه ثابت است).</p>
+                            <p>تمرکز این بخش بر یادگیری مفهوم ساعت است.</p>
+                            <p>با دکمه‌های «ساعت قبل» و «ساعت بعد»، ساعت را تغییر دهید.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- حالت فقط دقیقه -->
+                <div id="minuteModeContent" class="mode-content hidden">
+                    <h2 class="mode-title">حالت فقط دقیقه</h2>
+                    
+                    <div class="clock-container">
+                        <div class="analog-clock" id="minuteAnalogClock">
+                            <!-- اعداد ساعت (فارسی) -->
+                            <div class="clock-numbers" id="minuteClockNumbers"></div>
+                            <div class="clock-center"></div>
+                            <div class="hour-hand" style="opacity: 0.3;" id="minuteHourHand"></div>
+                            <div class="minute-hand" id="minuteOnlyHand"></div>
+                        </div>
+                        
+                        <div class="time-display" id="minuteTimeDisplay">۱۲:۰۰</div>
+                        
+                        <div class="clock-controls">
+                            <button id="prevMinuteOnly" class="clock-btn">
+                                <i class="fas fa-arrow-right"></i>
+                                <span>۵ دقیقه قبل</span>
+                            </button>
+                            
+                            <button id="nextMinuteOnly" class="clock-btn">
+                                <i class="fas fa-arrow-left"></i>
+                                <span>۵ دقیقه بعد</span>
+                            </button>
+                        </div>
+                        
+                        <div class="controls-container">
+                            <button id="randomMinute" class="control-button primary-btn">
+                                <i class="fas fa-random"></i> دقیقه تصادفی
+                            </button>
+                        </div>
+                        
+                        <div class="instructions">
+                            <h3>راهنمای استفاده:</h3>
+                            <p>در این حالت فقط عقربه دقیقه حرکت می‌کند (عقربه ساعت ثابت است).</p>
+                            <p>تمرکز این بخش بر یادگیری مفهوم دقیقه است.</p>
+                            <p>با دکمه‌های «۵ دقیقه قبل» و «۵ دقیقه بعد»، دقیقه را تغییر دهید.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- حالت تایپ -->
+                <div id="typingModeContent" class="mode-content hidden">
+                    <h2 class="mode-title">حالت تایپ</h2>
+                    
+                    <div class="typing-container">
+                        <div class="time-inputs">
+                            <div class="input-with-label">
+                                <div class="input-label-small">ساعت (۱ تا ۱۲)</div>
+                                <input type="text" id="inputHour" class="number-input" inputmode="numeric" pattern="[0-9۰-۹]*" value="12">
+                            </div>
+                            
+                            <div class="input-with-label">
+                                <div class="input-label-small">دقیقه (۰ تا ۵۹)</div>
+                                <input type="text" id="inputMinute" class="number-input" inputmode="numeric" pattern="[0-9۰-۹]*" value="0">
+                            </div>
+                        </div>
+                        
+                        <button id="applyTime" class="control-button primary-btn" style="padding: 18px 35px; font-size: 1.2rem;">
+                            <i class="fas fa-check-circle"></i> اعمال زمان روی ساعت
+                        </button>
+                        
+                        <div style="margin-top: 30px;">
+                            <div class="analog-clock" id="typingAnalogClock" style="margin: 0 auto 30px;">
+                                <!-- اعداد ساعت (فارسی) -->
+                                <div class="clock-numbers" id="typingClockNumbers"></div>
+                                <div class="clock-center"></div>
+                                <div class="hour-hand" id="typingHourHand"></div>
+                                <div class="minute-hand" id="typingMinuteHand"></div>
+                            </div>
+                            
+                            <div class="time-display" id="typingTimeDisplay">۱۲:۰۰</div>
+                        </div>
+                        
+                        <div class="instructions">
+                            <h3>راهنمای استفاده:</h3>
+                            <p>ساعت و دقیقه مورد نظر خود را وارد کنید (ساعت ۱ تا ۱۲، دقیقه ۰ تا ۵۹).</p>
+                            <p>با زدن دکمه «اعمال زمان روی ساعت»، عقربه‌های ساعت روی زمان وارد شده تنظیم می‌شوند.</p>
+                            <p>این حالت به درک رابطه بین اعداد و موقعیت عقربه‌ها کمک می‌کند.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // متغیرهای عمومی
+        let currentMode = 'manual';
+        let currentHour = 12;
+        let currentMinute = 0;
+        let currentDifficulty = 'easy';
+        let autoHour = 0;
+        let autoMinute = 0;
+        let isSidebarOpen = false;
+        
+        // اعداد فارسی برای ساعت
+        const persianNumbers = ['۱۲', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹', '۱۰', '۱۱'];
+        
+        // هنگام بارگذاری صفحه
+        document.addEventListener('DOMContentLoaded', function() {
+            initLogin();
+            initClockNumbers();
+            initManualMode();
+            initAutoMode();
+            initHourMode();
+            initMinuteMode();
+            initTypingMode();
+            initMenu();
+            initSidebar();
+            
+            // تنظیم اولیه
+            document.getElementById('loginButton').click();
+        });
+        
+        // سیستم ورود
+        function initLogin() {
+            const loginButton = document.getElementById('loginButton');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const errorMessage = document.getElementById('errorMessage');
+            const loginScreen = document.getElementById('loginScreen');
+            const mainContainer = document.getElementById('mainContainer');
+            
+            loginButton.addEventListener('click', function() {
+                const username = usernameInput.value.trim();
+                const password = passwordInput.value.trim();
+                
+                if (username === 'Abbas' && password === '1396') {
+                    // ورود موفق
+                    loginScreen.classList.add('hidden');
+                    mainContainer.classList.remove('hidden');
+                    errorMessage.classList.remove('show-error');
+                    
+                    // پخش صدای خوشامدگویی
+                    playSuccessSound();
+                } else {
+                    // ورود ناموفق
+                    errorMessage.classList.add('show-error');
+                    usernameInput.style.borderColor = '#ff4757';
+                    passwordInput.style.borderColor = '#ff4757';
+                    
+                    // ریست کردن border بعد از 1 ثانیه
+                    setTimeout(() => {
+                        usernameInput.style.borderColor = '';
+                        passwordInput.style.borderColor = '';
+                    }, 1000);
+                    
+                    // پخش صدای خطا
+                    playErrorSound();
+                }
+            });
+            
+            // امکان ورود با کلید Enter
+            usernameInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    passwordInput.focus();
+                }
+            });
+            
+            passwordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    loginButton.click();
+                }
+            });
+        }
+        
+        // ایجاد اعداد فارسی روی ساعت
+        function initClockNumbers() {
+            // برای ساعت دستی
+            const clockNumbers = document.getElementById('clockNumbers');
+            createClockNumbers(clockNumbers);
+            
+            // برای ساعت خودکار
+            const autoClockNumbers = document.getElementById('autoClockNumbers');
+            createClockNumbers(autoClockNumbers);
+            
+            // برای ساعت فقط ساعت
+            const hourClockNumbers = document.getElementById('hourClockNumbers');
+            createClockNumbers(hourClockNumbers);
+            
+            // برای ساعت فقط دقیقه
+            const minuteClockNumbers = document.getElementById('minuteClockNumbers');
+            createClockNumbers(minuteClockNumbers);
+            
+            // برای ساعت تایپی
+            const typingClockNumbers = document.getElementById('typingClockNumbers');
+            createClockNumbers(typingClockNumbers);
+        }
+        
+        // تابع کمکی برای ایجاد اعداد ساعت
+        function createClockNumbers(container) {
+            container.innerHTML = '';
+            // create 12 numbers
+            for (let i = 0; i < 12; i++) {
+                const numberElement = document.createElement('div');
+                numberElement.className = 'clock-number';
+                numberElement.textContent = persianNumbers[i];
+
+                // محاسبه موقعیت هر عدد روی ساعت
+                const angleRad = (i * 30) * (Math.PI / 180); // تبدیل به رادیان
+                const radius = 42; // درصد شعاع ساعت برای اعداد
+                const x = 50 + radius * Math.sin(angleRad);
+                const y = 50 - radius * Math.cos(angleRad);
+
+                numberElement.style.left = `${x}%`;
+                numberElement.style.top = `${y}%`;
+                numberElement.style.transform = 'translate(-50%, -50%)';
+
+                container.appendChild(numberElement);
+            }
+
+            // create 60 minute ticks (one per minute)
+            for (let i = 0; i < 60; i++) {
+                const tick = document.createElement('div');
+                tick.className = 'clock-tick';
+                const isMajor = (i % 5) === 0;
+                if (isMajor) tick.classList.add('major');
+
+                const angleRad = (i * 6) * (Math.PI / 180); // 6deg per minute
+                const angleDeg = i * 6;
+
+                // position ticks slightly inside numbers
+                const tickRadius = isMajor ? 34 : 30; // percent
+                const xTick = 50 + tickRadius * Math.sin(angleRad);
+                const yTick = 50 - tickRadius * Math.cos(angleRad);
+
+                tick.style.left = `${xTick}%`;
+                tick.style.top = `${yTick}%`;
+                tick.style.transform = `translate(-50%, -50%) rotate(${angleDeg}deg)`;
+
+                container.appendChild(tick);
+            }
+        }
+        
+        // حالت دستی ساعت
+        function initManualMode() {
+            const hourHand = document.getElementById('hourHand');
+            const minuteHand = document.getElementById('minuteHand');
+            const timeDisplay = document.getElementById('timeDisplay');
+            const resetButton = document.getElementById('resetClock');
+            const randomButton = document.getElementById('randomTime');
+            const prevHourBtn = document.getElementById('prevHourBtn');
+            const nextHourBtn = document.getElementById('nextHourBtn');
+            const prevMinuteBtn = document.getElementById('prevMinuteBtn');
+            const nextMinuteBtn = document.getElementById('nextMinuteBtn');
+            
+            // تنظیم موقعیت اولیه عقربه‌ها
+            updateClockHands(hourHand, minuteHand, currentHour, currentMinute);
+            updateTimeDisplay(timeDisplay, currentHour, currentMinute);
+            
+            // کنترل ساعت
+            prevHourBtn.addEventListener('click', function() {
+                currentHour--;
+                if (currentHour < 1) currentHour = 12;
+                updateClockHands(hourHand, minuteHand, currentHour, currentMinute);
+                updateTimeDisplay(timeDisplay, currentHour, currentMinute);
+                playClickSound();
+            });
+            
+            nextHourBtn.addEventListener('click', function() {
+                currentHour = currentHour % 12 + 1;
+                updateClockHands(hourHand, minuteHand, currentHour, currentMinute);
+                updateTimeDisplay(timeDisplay, currentHour, currentMinute);
+                playClickSound();
+            });
+            
+            // کنترل دقیقه
+            prevMinuteBtn.addEventListener('click', function() {
+                currentMinute -= 5;
+                if (currentMinute < 0) {
+                    currentMinute = 55;
+                    // اگر به ابتدای ساعت قبل رسیدیم
+                    currentHour--;
+                    if (currentHour < 1) currentHour = 12;
+                }
+                updateClockHands(hourHand, minuteHand, currentHour, currentMinute);
+                updateTimeDisplay(timeDisplay, currentHour, currentMinute);
+                playClickSound();
+            });
+            
+            nextMinuteBtn.addEventListener('click', function() {
+                currentMinute += 5;
+                if (currentMinute >= 60) {
+                    currentMinute = 0;
+                    // اگر به ابتدای ساعت بعد رسیدیم
+                    currentHour = currentHour % 12 + 1;
+                }
+                updateClockHands(hourHand, minuteHand, currentHour, currentMinute);
+                updateTimeDisplay(timeDisplay, currentHour, currentMinute);
+                playClickSound();
+            });
+            
+            // دکمه بازنشانی
+            resetButton.addEventListener('click', function() {
+                currentHour = 12;
+                currentMinute = 0;
+                updateClockHands(hourHand, minuteHand, currentHour, currentMinute);
+                updateTimeDisplay(timeDisplay, currentHour, currentMinute);
+                playClickSound();
+            });
+            
+            // دکمه زمان تصادفی
+            randomButton.addEventListener('click', function() {
+                currentHour = Math.floor(Math.random() * 12) + 1;
+                currentMinute = Math.floor(Math.random() * 12) * 5; // مضرب ۵
+                updateClockHands(hourHand, minuteHand, currentHour, currentMinute);
+                updateTimeDisplay(timeDisplay, currentHour, currentMinute);
+                playClickSound();
+            });
+        }
+        
+        // حالت تمرین خودکار
+        function initAutoMode() {
+            const easyBtn = document.getElementById('easyBtn');
+            const mediumBtn = document.getElementById('mediumBtn');
+            const hardBtn = document.getElementById('hardBtn');
+            const generateBtn = document.getElementById('generateQuestion');
+            const showAnswerBtn = document.getElementById('showAnswer');
+            const feedbackContainer = document.getElementById('feedbackContainer');
+            const autoHourHand = document.getElementById('autoHourHand');
+            const autoMinuteHand = document.getElementById('autoMinuteHand');
+            
+            // تنظیم دشواری
+            easyBtn.addEventListener('click', function() {
+                setDifficulty('easy', easyBtn, mediumBtn, hardBtn);
+                playClickSound();
+            });
+            
+            mediumBtn.addEventListener('click', function() {
+                setDifficulty('medium', easyBtn, mediumBtn, hardBtn);
+                playClickSound();
+            });
+            
+            hardBtn.addEventListener('click', function() {
+                setDifficulty('hard', easyBtn, mediumBtn, hardBtn);
+                playClickSound();
+            });
+            
+            // ایجاد سوال جدید
+            generateBtn.addEventListener('click', function() {
+                generateRandomTime();
+                updateClockHands(autoHourHand, autoMinuteHand, autoHour, autoMinute);
+                feedbackContainer.textContent = "ساعت چند است؟";
+                feedbackContainer.className = "feedback-container";
+                playClickSound();
+            });
+            
+            // نمایش پاسخ
+            showAnswerBtn.addEventListener('click', function() {
+                const hourText = autoHour === 0 ? 12 : autoHour;
+                const minuteText = autoMinute < 10 ? `0${autoMinute}` : `${autoMinute}`;
+                feedbackContainer.textContent = `پاسخ: ${toPersianDigits(hourText + ':' + minuteText)}`;
+                feedbackContainer.className = "feedback-container correct-feedback";
+                playSuccessSound();
+            });
+            
+            // تابع تنظیم دشواری
+            function setDifficulty(difficulty, easyBtn, mediumBtn, hardBtn) {
+                currentDifficulty = difficulty;
+                
+                // به‌روزرسانی ظاهر دکمه‌ها
+                easyBtn.classList.remove('active');
+                mediumBtn.classList.remove('active');
+                hardBtn.classList.remove('active');
+                
+                if (difficulty === 'easy') {
+                    easyBtn.classList.add('active');
+                } else if (difficulty === 'medium') {
+                    mediumBtn.classList.add('active');
+                } else {
+                    hardBtn.classList.add('active');
+                }
+            }
+            
+            // تابع تولید زمان تصادفی بر اساس سطح دشواری
+            function generateRandomTime() {
+                if (currentDifficulty === 'easy') {
+                    // فقط ساعت کامل
+                    autoHour = Math.floor(Math.random() * 12) + 1;
+                    autoMinute = 0;
+                } else if (currentDifficulty === 'medium') {
+                    // مضرب ۵ دقیقه
+                    autoHour = Math.floor(Math.random() * 12) + 1;
+                    autoMinute = Math.floor(Math.random() * 12) * 5;
+                } else {
+                    // دقیقه تصادفی
+                    autoHour = Math.floor(Math.random() * 12) + 1;
+                    autoMinute = Math.floor(Math.random() * 60);
+                }
+            }
+        }
+        
+        // حالت فقط ساعت
+        function initHourMode() {
+            const hourOnlyHand = document.getElementById('hourOnlyHand');
+            const hourMinuteHand = document.getElementById('hourMinuteHand');
+            const hourTimeDisplay = document.getElementById('hourTimeDisplay');
+            const randomHourBtn = document.getElementById('randomHour');
+            const prevHourOnly = document.getElementById('prevHourOnly');
+            const nextHourOnly = document.getElementById('nextHourOnly');
+            
+            let hourModeHour = 12;
+            const hourModeMinute = 0;
+            
+            // به‌روزرسانی اولیه
+            updateClockHands(hourOnlyHand, hourMinuteHand, hourModeHour, hourModeMinute);
+            updateTimeDisplay(hourTimeDisplay, hourModeHour, hourModeMinute);
+            
+            // دکمه‌های کنترل
+            randomHourBtn.addEventListener('click', function() {
+                hourModeHour = Math.floor(Math.random() * 12) + 1;
+                updateClockHands(hourOnlyHand, hourMinuteHand, hourModeHour, hourModeMinute);
+                updateTimeDisplay(hourTimeDisplay, hourModeHour, hourModeMinute);
+                playClickSound();
+            });
+            
+            prevHourOnly.addEventListener('click', function() {
+                hourModeHour--;
+                if (hourModeHour < 1) hourModeHour = 12;
+                updateClockHands(hourOnlyHand, hourMinuteHand, hourModeHour, hourModeMinute);
+                updateTimeDisplay(hourTimeDisplay, hourModeHour, hourModeMinute);
+                playClickSound();
+            });
+            
+            nextHourOnly.addEventListener('click', function() {
+                hourModeHour = hourModeHour % 12 + 1;
+                updateClockHands(hourOnlyHand, hourMinuteHand, hourModeHour, hourModeMinute);
+                updateTimeDisplay(hourTimeDisplay, hourModeHour, hourModeMinute);
+                playClickSound();
+            });
+        }
+        
+        // حالت فقط دقیقه
+        function initMinuteMode() {
+            const minuteHourHand = document.getElementById('minuteHourHand');
+            const minuteOnlyHand = document.getElementById('minuteOnlyHand');
+            const minuteTimeDisplay = document.getElementById('minuteTimeDisplay');
+            const randomMinuteBtn = document.getElementById('randomMinute');
+            const prevMinuteOnly = document.getElementById('prevMinuteOnly');
+            const nextMinuteOnly = document.getElementById('nextMinuteOnly');
+            
+            const minuteModeHour = 12;
+            let minuteModeMinute = 0;
+            
+            // به‌روزرسانی اولیه
+            updateClockHands(minuteHourHand, minuteOnlyHand, minuteModeHour, minuteModeMinute);
+            updateTimeDisplay(minuteTimeDisplay, minuteModeHour, minuteModeMinute);
+            
+            // دکمه‌های کنترل
+            randomMinuteBtn.addEventListener('click', function() {
+                minuteModeMinute = Math.floor(Math.random() * 60);
+                updateClockHands(minuteHourHand, minuteOnlyHand, minuteModeHour, minuteModeMinute);
+                updateTimeDisplay(minuteTimeDisplay, minuteModeHour, minuteModeMinute);
+                playClickSound();
+            });
+            
+            prevMinuteOnly.addEventListener('click', function() {
+                minuteModeMinute -= 5;
+                if (minuteModeMinute < 0) minuteModeMinute = 55;
+                updateClockHands(minuteHourHand, minuteOnlyHand, minuteModeHour, minuteModeMinute);
+                updateTimeDisplay(minuteTimeDisplay, minuteModeHour, minuteModeMinute);
+                playClickSound();
+            });
+            
+            nextMinuteOnly.addEventListener('click', function() {
+                minuteModeMinute = (minuteModeMinute + 5) % 60;
+                updateClockHands(minuteHourHand, minuteOnlyHand, minuteModeHour, minuteModeMinute);
+                updateTimeDisplay(minuteTimeDisplay, minuteModeHour, minuteModeMinute);
+                playClickSound();
+            });
+        }
+        
+        // حالت تایپ
+        function initTypingMode() {
+            const inputHour = document.getElementById('inputHour');
+            const inputMinute = document.getElementById('inputMinute');
+            const applyTimeBtn = document.getElementById('applyTime');
+            const typingHourHand = document.getElementById('typingHourHand');
+            const typingMinuteHand = document.getElementById('typingMinuteHand');
+            const typingTimeDisplay = document.getElementById('typingTimeDisplay');
+            
+            // اعتبارسنجی ورودی‌ها
+            inputHour.addEventListener('change', function() {
+                // allow Persian or Latin digits, normalize then enforce range
+                let raw = fromPersianDigits(this.value.replace(/[^0-9۰-۹]/g, ''));
+                let value = parseInt(raw === '' ? '0' : raw, 10);
+                if (isNaN(value)) value = 1;
+                if (value < 1) value = 1;
+                if (value > 12) value = 12;
+                this.dataset.value = value;
+                this.value = toPersianDigits(value);
+            });
+            
+            inputMinute.addEventListener('change', function() {
+                // normalize Persian/Latin digits then enforce range
+                let raw = fromPersianDigits(this.value.replace(/[^0-9۰-۹]/g, ''));
+                let value = parseInt(raw === '' ? '0' : raw, 10);
+                if (isNaN(value)) value = 0;
+                if (value < 0) value = 0;
+                if (value > 59) value = 59;
+                this.dataset.value = value;
+                this.value = toPersianDigits(value);
+            });
+            
+            // اعمال زمان روی ساعت
+            applyTimeBtn.addEventListener('click', function() {
+                // read numeric values from data-value (set on change) or fallback
+                const hour = parseInt(inputHour.dataset.value || fromPersianDigits(inputHour.value) || '12', 10);
+                const minute = parseInt(inputMinute.dataset.value || fromPersianDigits(inputMinute.value) || '0', 10);
+
+                updateClockHands(typingHourHand, typingMinuteHand, hour, minute);
+                updateTimeDisplay(typingTimeDisplay, hour, minute);
+                playSuccessSound();
+                
+                // انیمیشن تأیید
+                applyTimeBtn.classList.add('celebrate');
+                setTimeout(() => {
+                    applyTimeBtn.classList.remove('celebrate');
+                }, 1500);
+            });
+            
+            // به‌روزرسانی اولیه
+            // show Persian digits in the inputs initially
+            inputHour.dataset.value = 12;
+            inputMinute.dataset.value = 0;
+            inputHour.value = toPersianDigits(12);
+            inputMinute.value = toPersianDigits(0);
+            updateClockHands(typingHourHand, typingMinuteHand, 12, 0);
+            updateTimeDisplay(typingTimeDisplay, 12, 0);
+        }
+        
+        // منو و سایدبار
+        function initMenu() {
+            const manualModeBtn = document.getElementById('manualMode');
+            const autoModeBtn = document.getElementById('autoMode');
+            const hourModeBtn = document.getElementById('hourMode');
+            const minuteModeBtn = document.getElementById('minuteMode');
+            const typingModeBtn = document.getElementById('typingMode');
+            const logoutBtn = document.getElementById('logoutButton');
+            
+            const manualModeContent = document.getElementById('manualModeContent');
+            const autoModeContent = document.getElementById('autoModeContent');
+            const hourModeContent = document.getElementById('hourModeContent');
+            const minuteModeContent = document.getElementById('minuteModeContent');
+            const typingModeContent = document.getElementById('typingModeContent');
+            
+            const loginScreen = document.getElementById('loginScreen');
+            const mainContainer = document.getElementById('mainContainer');
+            
+            // تغییر حالت‌ها
+            manualModeBtn.addEventListener('click', function() {
+                switchMode('manual', manualModeBtn, manualModeContent);
+                closeSidebar();
+            });
+            
+            autoModeBtn.addEventListener('click', function() {
+                switchMode('auto', autoModeBtn, autoModeContent);
+                closeSidebar();
+            });
+            
+            hourModeBtn.addEventListener('click', function() {
+                switchMode('hour', hourModeBtn, hourModeContent);
+                closeSidebar();
+            });
+            
+            minuteModeBtn.addEventListener('click', function() {
+                switchMode('minute', minuteModeBtn, minuteModeContent);
+                closeSidebar();
+            });
+            
+            typingModeBtn.addEventListener('click', function() {
+                switchMode('typing', typingModeBtn, typingModeContent);
+                closeSidebar();
+            });
+            
+            // خروج
+            logoutBtn.addEventListener('click', function() {
+                mainContainer.classList.add('hidden');
+                loginScreen.classList.remove('hidden');
+                
+                // ریست کردن فیلدهای ورود
+                document.getElementById('username').value = 'Abbas';
+                document.getElementById('password').value = '1396';
+                document.getElementById('errorMessage').classList.remove('show-error');
+                
+                playClickSound();
+                closeSidebar();
+            });
+            
+            // تابع تغییر حالت
+            function switchMode(mode, button, content) {
+                // به‌روزرسانی حالت فعلی
+                currentMode = mode;
+                
+                // مخفی کردن تمام محتواها
+                const allContents = [manualModeContent, autoModeContent, hourModeContent, minuteModeContent, typingModeContent];
+                allContents.forEach(content => content.classList.add('hidden'));
+                
+                // غیرفعال کردن تمام دکمه‌های منو
+                const allButtons = [manualModeBtn, autoModeBtn, hourModeBtn, minuteModeBtn, typingModeBtn];
+                allButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // نمایش محتوای انتخاب شده
+                content.classList.remove('hidden');
+                button.classList.add('active');
+                
+                playClickSound();
+            }
+        }
+        
+        // مدیریت سایدبار
+        function initSidebar() {
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            const contentArea = document.querySelector('.content-area');
+            
+            menuToggle.addEventListener('click', function() {
+                if (isSidebarOpen) {
+                    closeSidebar();
+                } else {
+                    openSidebar();
+                }
+                playClickSound();
+            });
+            
+            // بستن سایدبار با کلیک خارج از آن
+            contentArea.addEventListener('click', function() {
+                if (isSidebarOpen) {
+                    closeSidebar();
+                }
+            });
+            
+            // جلوگیری از بستن سایدبار با کلیک روی خود سایدبار
+            sidebar.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        }
+        
+        function openSidebar() {
+            document.getElementById('sidebar').classList.add('open');
+            isSidebarOpen = true;
+        }
+        
+        function closeSidebar() {
+            document.getElementById('sidebar').classList.remove('open');
+            isSidebarOpen = false;
+        }
+        
+        // تابع به‌روزرسانی عقربه‌های ساعت
+        function updateClockHands(hourHand, minuteHand, hour, minute) {
+            // تبدیل ساعت 12 ساعته به موقعیت عقربه
+            const hourAngle = (hour % 12) * 30 + (minute / 2); // هر ساعت 30 درجه + اثر دقیقه
+            const minuteAngle = minute * 6; // هر دقیقه 6 درجه
+            
+            hourHand.style.transform = `translate(-50%, -100%) rotate(${hourAngle}deg)`;
+            minuteHand.style.transform = `translate(-50%, -100%) rotate(${minuteAngle}deg)`;
+        }
+        
+        // تابع به‌روزرسانی نمایش زمان
+        function updateTimeDisplay(timeDisplay, hour, minute) {
+            const hourText = hour === 0 ? 12 : hour;
+            const minuteNum = minute < 10 ? `0${minute}` : `${minute}`;
+            timeDisplay.textContent = toPersianDigits(`${hourText}:${minuteNum}`);
+        }
+
+        // تبدیل ارقام لاتین به فارسی
+        function toPersianDigits(input) {
+            const persian = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+            return String(input).replace(/\d/g, function(d) { return persian[d]; });
+        }
+
+        // تبدیل ارقام فارسی به لاتین (برای ورودی‌ها)
+        function fromPersianDigits(input) {
+            const persian = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+            return String(input).replace(/[۰-۹]/g, function(d) { return persian.indexOf(d); });
+        }
+        
+        // توابع صدا
+        function playClickSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = 800;
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.1);
+            } catch (e) {
+                // اگر AudioContext پشتیبانی نشد، هیچ کاری نکن
+            }
+        }
+        
+        function playSuccessSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime);
+                oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1);
+                oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2);
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.3);
+            } catch (e) {
+                // صدا پشتیبانی نمی‌شود
+            }
+        }
+        
+        function playErrorSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
+                oscillator.frequency.setValueAtTime(150, audioContext.currentTime + 0.1);
+                oscillator.type = 'sawtooth';
+                
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.2);
+            } catch (e) {
+                // صدا پشتیبانی نمی‌شود
+            }
+        }
+    </script>
+</body>
+</html>
