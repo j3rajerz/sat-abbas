@@ -1326,14 +1326,14 @@
             prevHourBtn.addEventListener('click', function() {
                 currentHour--;
                 if (currentHour < 1) currentHour = 12;
-                updateClockHands(hourHand, minuteHand, currentHour, currentMinute);
+                updateClockHands(hourHand, minuteHand, currentHour, currentMinute, true);
                 updateTimeDisplay(timeDisplay, currentHour, currentMinute);
                 playClickSound();
             });
             
             nextHourBtn.addEventListener('click', function() {
                 currentHour = currentHour % 12 + 1;
-                updateClockHands(hourHand, minuteHand, currentHour, currentMinute);
+                updateClockHands(hourHand, minuteHand, currentHour, currentMinute, true);
                 updateTimeDisplay(timeDisplay, currentHour, currentMinute);
                 playClickSound();
             });
@@ -1347,7 +1347,7 @@
                     currentHour--;
                     if (currentHour < 1) currentHour = 12;
                 }
-                updateClockHands(hourHand, minuteHand, currentHour, currentMinute);
+                updateClockHands(hourHand, minuteHand, currentHour, currentMinute, true);
                 updateTimeDisplay(timeDisplay, currentHour, currentMinute);
                 playClickSound();
             });
@@ -1359,7 +1359,7 @@
                     // اگر به ابتدای ساعت بعد رسیدیم
                     currentHour = currentHour % 12 + 1;
                 }
-                updateClockHands(hourHand, minuteHand, currentHour, currentMinute);
+                updateClockHands(hourHand, minuteHand, currentHour, currentMinute, true);
                 updateTimeDisplay(timeDisplay, currentHour, currentMinute);
                 playClickSound();
             });
@@ -1368,7 +1368,7 @@
             resetButton.addEventListener('click', function() {
                 currentHour = 12;
                 currentMinute = 0;
-                updateClockHands(hourHand, minuteHand, currentHour, currentMinute);
+                updateClockHands(hourHand, minuteHand, currentHour, currentMinute, true);
                 updateTimeDisplay(timeDisplay, currentHour, currentMinute);
                 playClickSound();
             });
@@ -1377,7 +1377,7 @@
             randomButton.addEventListener('click', function() {
                 currentHour = Math.floor(Math.random() * 12) + 1;
                 currentMinute = Math.floor(Math.random() * 12) * 5; // مضرب ۵
-                updateClockHands(hourHand, minuteHand, currentHour, currentMinute);
+                updateClockHands(hourHand, minuteHand, currentHour, currentMinute, true);
                 updateTimeDisplay(timeDisplay, currentHour, currentMinute);
                 playClickSound();
             });
@@ -1413,7 +1413,7 @@
             // ایجاد سوال جدید
             generateBtn.addEventListener('click', function() {
                 generateRandomTime();
-                updateClockHands(autoHourHand, autoMinuteHand, autoHour, autoMinute);
+                updateClockHands(autoHourHand, autoMinuteHand, autoHour, autoMinute, true);
                 feedbackContainer.textContent = "ساعت چند است؟";
                 feedbackContainer.className = "feedback-container";
                 playClickSound();
@@ -1483,7 +1483,7 @@
             // دکمه‌های کنترل
             randomHourBtn.addEventListener('click', function() {
                 hourModeHour = Math.floor(Math.random() * 12) + 1;
-                updateClockHands(hourOnlyHand, hourMinuteHand, hourModeHour, hourModeMinute);
+                updateClockHands(hourOnlyHand, hourMinuteHand, hourModeHour, hourModeMinute, true);
                 updateTimeDisplay(hourTimeDisplay, hourModeHour, hourModeMinute);
                 playClickSound();
             });
@@ -1491,14 +1491,14 @@
             prevHourOnly.addEventListener('click', function() {
                 hourModeHour--;
                 if (hourModeHour < 1) hourModeHour = 12;
-                updateClockHands(hourOnlyHand, hourMinuteHand, hourModeHour, hourModeMinute);
+                updateClockHands(hourOnlyHand, hourMinuteHand, hourModeHour, hourModeMinute, true);
                 updateTimeDisplay(hourTimeDisplay, hourModeHour, hourModeMinute);
                 playClickSound();
             });
             
             nextHourOnly.addEventListener('click', function() {
                 hourModeHour = hourModeHour % 12 + 1;
-                updateClockHands(hourOnlyHand, hourMinuteHand, hourModeHour, hourModeMinute);
+                updateClockHands(hourOnlyHand, hourMinuteHand, hourModeHour, hourModeMinute, true);
                 updateTimeDisplay(hourTimeDisplay, hourModeHour, hourModeMinute);
                 playClickSound();
             });
@@ -1523,7 +1523,7 @@
             // دکمه‌های کنترل
             randomMinuteBtn.addEventListener('click', function() {
                 minuteModeMinute = Math.floor(Math.random() * 60);
-                updateClockHands(minuteHourHand, minuteOnlyHand, minuteModeHour, minuteModeMinute);
+                updateClockHands(minuteHourHand, minuteOnlyHand, minuteModeHour, minuteModeMinute, true);
                 updateTimeDisplay(minuteTimeDisplay, minuteModeHour, minuteModeMinute);
                 playClickSound();
             });
@@ -1531,14 +1531,14 @@
             prevMinuteOnly.addEventListener('click', function() {
                 minuteModeMinute -= 5;
                 if (minuteModeMinute < 0) minuteModeMinute = 55;
-                updateClockHands(minuteHourHand, minuteOnlyHand, minuteModeHour, minuteModeMinute);
+                updateClockHands(minuteHourHand, minuteOnlyHand, minuteModeHour, minuteModeMinute, true);
                 updateTimeDisplay(minuteTimeDisplay, minuteModeHour, minuteModeMinute);
                 playClickSound();
             });
             
             nextMinuteOnly.addEventListener('click', function() {
                 minuteModeMinute = (minuteModeMinute + 5) % 60;
-                updateClockHands(minuteHourHand, minuteOnlyHand, minuteModeHour, minuteModeMinute);
+                updateClockHands(minuteHourHand, minuteOnlyHand, minuteModeHour, minuteModeMinute, true);
                 updateTimeDisplay(minuteTimeDisplay, minuteModeHour, minuteModeMinute);
                 playClickSound();
             });
@@ -1562,7 +1562,11 @@
                 if (value < 1) value = 1;
                 if (value > 12) value = 12;
                 this.dataset.value = value;
+                suppressInputSound = true;
                 this.value = toPersianDigits(value);
+                suppressInputSound = false;
+                // feedback sound for setting a value
+                playKeypressSound();
             });
             
             inputMinute.addEventListener('change', function() {
@@ -1573,7 +1577,20 @@
                 if (value < 0) value = 0;
                 if (value > 59) value = 59;
                 this.dataset.value = value;
+                suppressInputSound = true;
                 this.value = toPersianDigits(value);
+                suppressInputSound = false;
+                // feedback sound for setting a value
+                playKeypressSound();
+            });
+
+            // هنگام تایپ واقعی، یک صدای کوتاه پخش کن (موبایل/صفحه‌کلید)
+            inputHour.addEventListener('input', function() {
+                if (!suppressInputSound) playKeypressSound();
+            });
+
+            inputMinute.addEventListener('input', function() {
+                if (!suppressInputSound) playKeypressSound();
             });
             
             // اعمال زمان روی ساعت
@@ -1582,7 +1599,7 @@
                 const hour = parseInt(inputHour.dataset.value || fromPersianDigits(inputHour.value) || '12', 10);
                 const minute = parseInt(inputMinute.dataset.value || fromPersianDigits(inputMinute.value) || '0', 10);
 
-                updateClockHands(typingHourHand, typingMinuteHand, hour, minute);
+                updateClockHands(typingHourHand, typingMinuteHand, hour, minute, true);
                 updateTimeDisplay(typingTimeDisplay, hour, minute);
                 playSuccessSound();
                 
@@ -1721,13 +1738,15 @@
         }
         
         // تابع به‌روزرسانی عقربه‌های ساعت
-        function updateClockHands(hourHand, minuteHand, hour, minute) {
+        // اضافه‌شده: پارامتر playSound (اختیاری) برای پخش افکت حرکت عقربه
+        function updateClockHands(hourHand, minuteHand, hour, minute, playSound = false) {
             // تبدیل ساعت 12 ساعته به موقعیت عقربه
             const hourAngle = (hour % 12) * 30 + (minute / 2); // هر ساعت 30 درجه + اثر دقیقه
             const minuteAngle = minute * 6; // هر دقیقه 6 درجه
             
             hourHand.style.transform = `translate(-50%, -100%) rotate(${hourAngle}deg)`;
             minuteHand.style.transform = `translate(-50%, -100%) rotate(${minuteAngle}deg)`;
+            if (playSound) playHandMoveSound();
         }
         
         // تابع به‌روزرسانی نمایش زمان
@@ -1752,19 +1771,20 @@
         // توابع صدا
         function playClickSound() {
             try {
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const audioContext = getAudioContext();
+                if (!audioContext) return;
                 const oscillator = audioContext.createOscillator();
                 const gainNode = audioContext.createGain();
-                
+
                 oscillator.connect(gainNode);
                 gainNode.connect(audioContext.destination);
-                
+
                 oscillator.frequency.value = 800;
                 oscillator.type = 'sine';
-                
+
                 gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
                 gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-                
+
                 oscillator.start(audioContext.currentTime);
                 oscillator.stop(audioContext.currentTime + 0.1);
             } catch (e) {
@@ -1774,21 +1794,22 @@
         
         function playSuccessSound() {
             try {
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const audioContext = getAudioContext();
+                if (!audioContext) return;
                 const oscillator = audioContext.createOscillator();
                 const gainNode = audioContext.createGain();
-                
+
                 oscillator.connect(gainNode);
                 gainNode.connect(audioContext.destination);
-                
+
                 oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime);
                 oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1);
                 oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2);
                 oscillator.type = 'sine';
-                
+
                 gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
                 gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-                
+
                 oscillator.start(audioContext.currentTime);
                 oscillator.stop(audioContext.currentTime + 0.3);
             } catch (e) {
@@ -1798,24 +1819,78 @@
         
         function playErrorSound() {
             try {
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const audioContext = getAudioContext();
+                if (!audioContext) return;
                 const oscillator = audioContext.createOscillator();
                 const gainNode = audioContext.createGain();
-                
+
                 oscillator.connect(gainNode);
                 gainNode.connect(audioContext.destination);
-                
+
                 oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
                 oscillator.frequency.setValueAtTime(150, audioContext.currentTime + 0.1);
                 oscillator.type = 'sawtooth';
-                
+
                 gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
                 gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
-                
+
                 oscillator.start(audioContext.currentTime);
                 oscillator.stop(audioContext.currentTime + 0.2);
             } catch (e) {
                 // صدا پشتیبانی نمی‌شود
+            }
+        }
+
+        // صدای حرکت عقربه - کوتاه و ملایم
+        function playHandMoveSound() {
+            try {
+                const ctx = getAudioContext();
+                if (!ctx) return;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                // sweep slightly for a subtle mechanical feel
+                osc.frequency.setValueAtTime(880, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + 0.06);
+                gain.gain.setValueAtTime(0.07, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.12);
+            } catch (e) {}
+        }
+
+        // صدای فشردن کلید / وارد کردن رقم - سریع و کوتاه
+        function playKeypressSound() {
+            try {
+                const ctx = getAudioContext();
+                if (!ctx) return;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(1200, ctx.currentTime);
+                gain.gain.setValueAtTime(0.06, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.06);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.06);
+            } catch (e) {}
+        }
+
+        // برای جلوگیری از پخش صدای ورودی هنگام ست برنامه‌ریزی‌شدهٔ مقدار ورودی
+        let suppressInputSound = false;
+
+        // یک AudioContext مشترک بساز (تا دوباره دوباره ایجاد نشود)
+        let _sharedAudioContext = null;
+        function getAudioContext() {
+            try {
+                if (_sharedAudioContext && _sharedAudioContext.state !== 'closed') return _sharedAudioContext;
+                _sharedAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+                return _sharedAudioContext;
+            } catch (e) {
+                return null;
             }
         }
     </script>
